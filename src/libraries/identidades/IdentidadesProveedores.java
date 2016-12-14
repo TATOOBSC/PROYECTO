@@ -28,6 +28,13 @@ public class IdentidadesProveedores {
         
     }
 
+    public IdentidadesProveedores(String codigo_proveedores, String nombre_proveedores, String tipo_producto) {
+        this.codigo_proveedores = codigo_proveedores;
+        this.nombre_proveedores = nombre_proveedores;
+        this.tipo_producto = tipo_producto;
+    }
+
+    
     public int getId_proveedores() {
         return id_proveedores;
     }

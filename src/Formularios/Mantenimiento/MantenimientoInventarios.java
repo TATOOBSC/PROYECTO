@@ -450,4 +450,66 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
     public static javax.swing.JTextField txtnombre;
     public static javax.swing.JTextField txtpreciounitario;
     // End of variables declaration//GEN-END:variables
+    public boolean ValidarEspaciosGuardar(){
+        boolean espacio = false;
+        if(MantenimientoInventarios.txtcodigo.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtnombre.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtadescripcion.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.cbtipo.getSelectedIndex() == -1){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtpreciounitario.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.cbproveedores.getSelectedIndex() == -1){
+            espacio = true;
+        }
+        if(Integer.parseInt(MantenimientoInventarios.spcantidad.getValue().toString()) == 0){
+            espacio = true;
+        }
+        return espacio;
+    }
+    
+    public boolean ValidarEspaciosModificar(){
+        boolean espacio = false;
+        if(MantenimientoInventarios.txtcodigo.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtnombre.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtadescripcion.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.cbtipo.getSelectedIndex() == -1){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtpreciounitario.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.cbproveedores.getSelectedIndex() == -1){
+            espacio = true;
+        }
+        if(Integer.parseInt(MantenimientoInventarios.spcantidad.getValue().toString()) == 0){
+            espacio = true;
+        }
+        if(MantenimientoInventarios.txtidproducto.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        return espacio;
+    }
+    
+    public boolean ValidarEspaciosEliminar(){
+        boolean espacio = false;
+        if(MantenimientoInventarios.txtidproducto.getText().replaceAll("\\s","").equals("")){
+            espacio = true;
+        }
+        return espacio;
+    }
 }

@@ -21,61 +21,70 @@ import libraries.identidades.IdentidadesCargos;
 public class repositorio_cargos {
 
     
-
-    
-    public void ConsultarRegistros(){
+    public void IngresoRegistros(IdentidadesCargos id){
         Conexion con = new Conexion();
         try{
             Connection conex = con.Conectar();
-            PreparedStatement pst = conex.prepareCall("SELECT * FROM cargos WHERE nombre_cargo = '" + MantenimientoCargos.txtnombrecargo.getText().toUpperCase() + "'");
-            ResultSet rs = pst.executeQuery();
-            if(rs.next()){
-                MantenimientoCargos.txtidcargo.setText(rs.getString(1));
-                MantenimientoCargos.txtnombrecargo.setText(rs.getString(2));
-                
-            }
-            else{
-                JOptionPane.showMessageDialog(null,"NO SE ENCONTRO CARGO CON ESE NOMBRE","VALUE NOT FOUND",JOptionPane.ERROR_MESSAGE);
-            }
+            PreparedStatement pst = conex.prepareStatement("INSERT INTO cargos(nombre_cargo) VALUES(?)");
+            pst.setString(1,id.getNombre_cargos().toUpperCase());
+            pst.executeUpdate();
         }
         catch(SQLException exc){
             JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);
         }
     }
     
+    public IdentidadesCargos ConsultarRegistros(String val){
+        Conexion con = new Conexion();
+        IdentidadesCargos idc = null;
+        try{
+            Connection conex = con.Conectar();
+            PreparedStatement pst = conex.prepareCall("SELECT * FROM cargos WHERE nombre_cargo = ?");
+            pst.setString(1, val);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                idc = new IdentidadesCargos(rs.getInt(1),rs.getString(2));
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"NO SE ENCONTRO CARGO CON ESE NOMBRE","VALUE NOT FOUND",JOptionPane.ERROR_MESSAGE);
+            }
+            return idc;
+        }
+        catch(SQLException exc){
+            JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
     
-    public void EliminarRegistros(){
+    
+    
+    public void ModificarRegistros(IdentidadesCargos id){
+        Conexion con = new Conexion();
+        try{
+            Connection conex = con.Conectar();
+            PreparedStatement pst = conex.prepareStatement("UPDATE cargos SET nombre_cargo = ? WHERE id_cargo =?");
+            pst.setInt(2, id.getId_cargos());
+            pst.setString(1,id.getNombre_cargos().toUpperCase());
+            pst.executeUpdate();
+        }
+        catch(SQLException exc){
+            JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void EliminarRegistros(int val){
+        Conexion con = new Conexion();
+        try{
+            Connection conex = con.Conectar();
+            PreparedStatement pst = conex.prepareStatement("DELETE FROM cargos WHERE id_cargo =?");
+            pst.setInt(1, val);
+            pst.executeUpdate();
+        }
+        catch(SQLException exc){
+            JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);
+        }
         
     }
     
-    public void Limpiar(){
-
-    }
-     
-    public boolean ValidacionEspacioGuardar(){
-        boolean espacio = false;
-        if(MantenimientoCargos.txtnombrecargo.getText().replaceAll("\\s+","").equals("")){
-            espacio = true;
-        }
-        return espacio;
-    }
     
-    public boolean ValidacionEspacioModificar(){
-        boolean espacio = false;
-        if(MantenimientoCargos.txtnombrecargo.getText().replaceAll("\\s+","").equals("")){
-            espacio = true;
-        }
-        if(MantenimientoCargos.txtidcargo.getText().replaceAll("\\s+","").equals("")){
-            espacio = true;
-        }
-        return espacio;
-    }
-    
-    public boolean ValidacionEspacioEliminar(){
-        boolean espacio = false;
-        if(MantenimientoCargos.txtidcargo.getText().replaceAll("\\s+","").equals("")){
-            espacio = true;
-        }
-        return espacio;
-    }
 }

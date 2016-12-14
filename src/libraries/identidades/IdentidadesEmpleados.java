@@ -36,6 +36,19 @@ public class IdentidadesEmpleados {
         this.cargos = cargos;
     }
 
+    public IdentidadesEmpleados(String codigo_empleado, String cedula, String nombres_empleado, String apellidos_empleado, Date fechanacimiento, String direccion, String telefono, IdentidadesUsers user, IdentidadesCargos cargos) {
+        this.codigo_empleado = codigo_empleado;
+        this.cedula = cedula;
+        this.nombres_empleado = nombres_empleado;
+        this.apellidos_empleado = apellidos_empleado;
+        this.fechanacimiento = fechanacimiento;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.user = user;
+        this.cargos = cargos;
+    }
+
+    
     public int getId_empleado() {
         return id_empleado;
     }

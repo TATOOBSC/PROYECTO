@@ -8,13 +8,15 @@ package Formularios.Mantenimiento;
 import javax.swing.JOptionPane;
 import libraries.formularios.dbProveedores;
 import libraries.formularios.libValidacionesTexto;
+import libraries.identidades.IdentidadesProveedores;
+import repositorio.repositorio_proveedores;
 
 /**
  *
  * @author Ellet
  */
 public class MantenimientoProveedores extends javax.swing.JFrame {
-
+    repositorio_proveedores repro = new repositorio_proveedores();
     /**
      * Creates new form MantenimientoProveedores
      */
@@ -196,16 +198,16 @@ public class MantenimientoProveedores extends javax.swing.JFrame {
         HabilitarCampos();
         botonnuevo.setEnabled(false);
         botonconsultar.setEnabled(true);
-        new dbProveedores().Limpiar();
+        repro.Limpiar();
     }//GEN-LAST:event_botonnuevoActionPerformed
 
     private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
-        if(new dbProveedores().ValidacionEspaciosEliminar()){
+        if(repro.ValidacionEspaciosEliminar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR LA ID DEL PROVEEDOR A ELIMINAR", "WARNING",JOptionPane.ERROR_MESSAGE);
         }else{
-            new dbProveedores().EliminarRegistros();
+            repro.EliminarRegistros();
             DeshabilitarCampos();
-            new dbProveedores().Limpiar();
+            repro.Limpiar();
             botonguardar.setEnabled(false);
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
@@ -225,17 +227,18 @@ public class MantenimientoProveedores extends javax.swing.JFrame {
         HabilitarCampos();
         botonconsultar.setEnabled(false);
         botonnuevo.setEnabled(true);
-        new dbProveedores().Limpiar();
+        repro.Limpiar();
     }//GEN-LAST:event_botonconsultarActionPerformed
 
     private void botonguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonguardarActionPerformed
-        if(new dbProveedores().ValidacionEspaciosGuardar()){
+        if(repro.ValidacionEspaciosGuardar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbProveedores().IngresarIdentidades();
+            IdentidadesProveedores id = new IdentidadesProveedores(txtcodigo.getText(),txtnombre.getText(), cbtipo.getSelectedItem().toString());
+            repro.IngresarRegistros(id);
             DeshabilitarCampos();
-            new dbProveedores().Limpiar();
+            repro.Limpiar();
             botonguardar.setEnabled(false);
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
@@ -246,13 +249,14 @@ public class MantenimientoProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_botonguardarActionPerformed
 
     private void botonmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonmodificarActionPerformed
-        if(new dbProveedores().ValidacionEspaciosModificar()){
+        if(repro.ValidacionEspaciosModificar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbProveedores().ModificarIdentidades();
+            IdentidadesProveedores id = new IdentidadesProveedores(Integer.parseInt(txtidproveedores.getText()),txtcodigo.getText(),txtnombre.getText(), cbtipo.getSelectedItem().toString());
+            repro.ModificarRegistros(id);
             DeshabilitarCampos();
-            new dbProveedores().Limpiar();
+            repro.Limpiar();
             botonguardar.setEnabled(false);
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
@@ -268,7 +272,11 @@ public class MantenimientoProveedores extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "PORFAVOR LLENE PARAMETRO DE BUSQUEDA","WARNING",JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            new dbProveedores().ConsultarRegistro();
+            IdentidadesProveedores id = repro.ConsultarRegistro();
+            txtidproveedores.setText(Integer.toString(id.getId_proveedores()));
+            txtcodigo.setText(id.getCodigo_proveedores());
+            txtnombre.setText(id.getNombre_proveedores());
+            cbtipo.setSelectedItem(id.getTipo_producto());
         }
         
         

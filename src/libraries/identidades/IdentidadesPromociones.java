@@ -28,6 +28,14 @@ public class IdentidadesPromociones {
         
     }
 
+    public IdentidadesPromociones(String codigo_promocion, String nombre_promocion, String descripcion, String tipo) {
+        this.codigo_promocion = codigo_promocion;
+        this.nombre_promocion = nombre_promocion;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+    }
+ 
+    
     public int getId_promociones() {
         return id_promociones;
     }

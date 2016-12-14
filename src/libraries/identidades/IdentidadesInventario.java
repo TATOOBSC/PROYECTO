@@ -30,6 +30,19 @@ public class IdentidadesInventario {
         this.proveedores = proveedores;
     }
 
+    public IdentidadesInventario(String codigo_producto, String nombre_producto, String descripcion, String tipo, double precio_unitario, int cantidad, IdentidadesProveedores proveedores) {
+        this.codigo_producto = codigo_producto;
+        this.nombre_producto = nombre_producto;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+        this.precio_unitario = precio_unitario;
+        this.cantidad = cantidad;
+        this.proveedores = proveedores;
+    }
+     
+    
+      
+    
     public int getId_inventario() {
         return id_inventario;
     }

@@ -26,6 +26,13 @@ public class IdentidadesUsers {
         
     }
 
+    public IdentidadesUsers(String username, String password, String nivel) {
+        this.username = username;
+        this.password = password;
+        this.nivel = nivel;
+    }
+ 
+    
     public int getId_user() {
         return id_user;
     }

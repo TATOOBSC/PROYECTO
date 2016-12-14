@@ -9,13 +9,15 @@ import Formularios.Principal.Principal;
 import javax.swing.JOptionPane;
 import libraries.formularios.dbUsers;
 import libraries.formularios.libValidacionesTexto;
+import libraries.identidades.IdentidadesUsers;
+import repositorio.repositorio_users;
 
 /**
  *
  * @author Ellet
  */
 public class MantenimientoUsuarios extends javax.swing.JFrame {
-
+    repositorio_users reus = new repositorio_users();
     /**
      * Creates new form AgregarUsuario
      */
@@ -201,11 +203,11 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
-        if(new dbUsers().ValidacionesEspaciosEliminar()){
+        if(reus.ValidacionesEspaciosEliminar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR LA ID DEL USUARIO A ELIMINAR", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-             new dbUsers().EliminarRegistros();
+            reus.EliminarRegistros();
             DeshabilitarCampos();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
@@ -213,7 +215,7 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
             botonguardar.setEnabled(false);
-            new dbUsers().Limpiar();
+            reus.Limpiar();
         }
        
        
@@ -227,16 +229,17 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
         lbiduser.setVisible(true);
         txtiduser.setVisible(true);
         HabilitarCampos();
-        new dbUsers().Limpiar();
+        reus.Limpiar();
     }//GEN-LAST:event_botonconsultarActionPerformed
 
     private void botonguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonguardarActionPerformed
-        if(new dbUsers().ValidacionesEspaciosGuardar()){
+        if(reus.ValidacionesEspaciosGuardar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbUsers().IngresarIdentidades();
-            int e = new dbUsers().CargarIdUser();
+            IdentidadesUsers id = new IdentidadesUsers(txtusername.getText(),txtpassword.getText(),cbnivel.getSelectedItem().toString());
+            reus.IngresarRegistros(id);
+            int e = reus.ConsultarRegistros().getId_user();
             if(e != -1 && botonregresar.isEnabled()){
             MantenimientoEmpleados.txtiduser.setText(Integer.toString(e));
             }
@@ -246,7 +249,7 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
             botoneliminar.setEnabled(false);
             botonguardar.setEnabled(false);
             botonconsultar.setEnabled(true);
-            new dbUsers().Limpiar();
+            reus.Limpiar();
         }
                 
         
@@ -261,7 +264,7 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
         lbiduser.setVisible(false);
         txtiduser.setVisible(false);
         HabilitarCampos();
-        new dbUsers().Limpiar();
+        reus.Limpiar();
     }//GEN-LAST:event_botonnuevoActionPerformed
 
     private void txtiduserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtiduserMouseClicked
@@ -277,11 +280,12 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void botonmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonmodificarActionPerformed
-        if(new dbUsers().ValidacionesEspaciosModificar()){
+        if(reus.ValidacionesEspaciosModificar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbUsers().ModificarIdentidades();
+            IdentidadesUsers id = new IdentidadesUsers(Integer.parseInt(txtiduser.getText()),txtusername.getText(),txtpassword.getText(),cbnivel.getSelectedItem().toString());
+            reus.ModificarRegistros(id);
             DeshabilitarCampos();
             botonrealizarconsulta.setEnabled(false);
             botonmodificar.setEnabled(false);
@@ -289,7 +293,7 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
             botonguardar.setEnabled(false);
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
-            new dbUsers().Limpiar();
+            reus.Limpiar();
         }
         
         
@@ -310,7 +314,11 @@ public class MantenimientoUsuarios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "PORFAVOR LLENE PARAMETRO DE BUSQUEDA","WARNING",JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            new dbUsers().ConsultarRegistros();
+            IdentidadesUsers id = reus.ConsultarRegistros();
+            txtusername.setText(id.getUsername());
+            txtiduser.setText(Integer.toString(id.getId_user()));
+            txtpassword.setText(id.getPassword());
+            cbnivel.setSelectedItem(id.getNivel());
         }
         
     }//GEN-LAST:event_botonrealizarconsultaActionPerformed

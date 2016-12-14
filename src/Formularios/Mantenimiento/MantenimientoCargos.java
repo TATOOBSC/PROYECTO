@@ -6,16 +6,16 @@
 package Formularios.Mantenimiento;
 
 import javax.swing.JOptionPane;
-import libraries.formularios.dbCargos;
 import libraries.formularios.libValidacionesTexto;
 import libraries.identidades.IdentidadesCargos;
+import repositorio.repositorio_cargos;
 
 /**
  *
  * @author Ellet
  */
 public class MantenimientoCargos extends javax.swing.JFrame {
-    dbCargos dbcar = new dbCargos();
+    repositorio_cargos dbcar = new repositorio_cargos();
     /**
      * Creates new form MantenimientoCargos
      */
