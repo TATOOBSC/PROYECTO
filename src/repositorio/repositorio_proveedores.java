@@ -5,6 +5,7 @@
  */
 package repositorio;
 
+import Formularios.Mantenimiento.MantenimientoInventarios;
 import Formularios.Mantenimiento.MantenimientoProveedores;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,6 +60,26 @@ public class repositorio_proveedores {
         try{
             Connection conex = con.Conectar();
             PreparedStatement pst = conex.prepareCall("SELECT * FROM proveedores WHERE codigo_proveedores = '"+ MantenimientoProveedores.txtcodigo.getText().toUpperCase()+"'");
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                id = new IdentidadesProveedores(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"NO SE ENCONTRO PROVEEDOR CON EL CODIGO ESPECIFICADO","VALUE NOT FOUND",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        catch(SQLException exc){
+            JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);
+        }
+        return id;
+    }
+    
+    public IdentidadesProveedores ConsultarRegistro(String val){
+        Conexion con = new Conexion();
+        IdentidadesProveedores id = null;
+        try{
+            Connection conex = con.Conectar();
+            PreparedStatement pst = conex.prepareCall("SELECT * FROM proveedores WHERE nombre_proveedores = '"+val+"'");
             ResultSet rs = pst.executeQuery();
             if(rs.next()){
                 id = new IdentidadesProveedores(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
@@ -139,15 +160,13 @@ public class repositorio_proveedores {
         List<IdentidadesProveedores> provs = new ArrayList<IdentidadesProveedores>();
         try{
             Connection conex = con.Conectar();
-            PreparedStatement pst = conex.prepareCall("SELECT * FROM proveedores");
+            PreparedStatement pst = conex.prepareCall("SELECT * FROM proveedores WHERE tipo_producto = '" +MantenimientoInventarios.cbtipo.getSelectedItem().toString()+ "'" );
             ResultSet rs = pst.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 IdentidadesProveedores id = new IdentidadesProveedores(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
                 provs.add(id);
             }
-            else{
-                JOptionPane.showMessageDialog(null,"NO SE ENCONTRO PROVEEDOR CON EL CODIGO ESPECIFICADO","VALUE NOT FOUND",JOptionPane.ERROR_MESSAGE);
-            }
+            
         }
         catch(SQLException exc){
             JOptionPane.showMessageDialog(null,exc.getMessage(),"WARNING",JOptionPane.ERROR_MESSAGE);

@@ -5,9 +5,14 @@
  */
 package Formularios.Mantenimiento;
 
+import java.util.List;
 import javax.swing.JOptionPane;
 import libraries.formularios.dbInventario;
 import libraries.formularios.libValidacionesTexto;
+import libraries.identidades.IdentidadesInventario;
+import libraries.identidades.IdentidadesProveedores;
+import repositorio.repositorio_inventario;
+import repositorio.repositorio_proveedores;
 
 
 /**
@@ -15,7 +20,8 @@ import libraries.formularios.libValidacionesTexto;
  * @author Ellet
  */
 public class MantenimientoInventarios extends javax.swing.JFrame {
-
+    repositorio_inventario repi = new repositorio_inventario();
+    repositorio_proveedores repro = new repositorio_proveedores();
     /**
      * Creates new form MantenimientoInventario
      */
@@ -45,11 +51,11 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
         spcantidad = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        cbproveedores = new javax.swing.JComboBox<>();
+        cbproveedores = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cbtipo = new javax.swing.JComboBox<>();
+        cbtipo = new javax.swing.JComboBox<String>();
         jLabel1 = new javax.swing.JLabel();
         botoncancelar = new javax.swing.JButton();
         botonnuevo = new javax.swing.JButton();
@@ -112,7 +118,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
         getContentPane().add(txtpreciounitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(174, 285, 200, -1));
 
         spcantidad.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        spcantidad.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spcantidad.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spcantidad.setEnabled(false);
         spcantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -146,7 +152,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 370, -1, -1));
 
         cbtipo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        cbtipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CHIP", "RECARGA" }));
+        cbtipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CHIP", "RECARGA" }));
         cbtipo.setSelectedIndex(-1);
         cbtipo.setEnabled(false);
         cbtipo.addItemListener(new java.awt.event.ItemListener() {
@@ -244,7 +250,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
     private void cbtipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtipoItemStateChanged
         if(cbtipo.getSelectedIndex() != -1){
             cbproveedores.removeAllItems();
-            new dbInventario().CargarProveedores();
+            cargarProveedores();
         }
     }//GEN-LAST:event_cbtipoItemStateChanged
 
@@ -270,11 +276,11 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
     }//GEN-LAST:event_botonnuevoActionPerformed
 
     private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
-        if(new dbInventario().ValidarEspaciosEliminar()){
+        if(ValidarEspaciosEliminar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR LA ID DEL PRODUCTO A ELIMINAR", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbInventario().EliminarRegistros();
+            repi.EliminarRegistros();
             DeshabilitarCampos();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
@@ -282,7 +288,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
             botonguardar.setEnabled(false);
-            new dbInventario().Limpiar();
+            repi.Limpiar();
         }
         
     }//GEN-LAST:event_botoneliminarActionPerformed
@@ -297,15 +303,17 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
         HabilitarCampos();
         botonconsultar.setEnabled(false);
         botonnuevo.setEnabled(true);
-        new dbInventario().Limpiar();
+        repi.Limpiar();
     }//GEN-LAST:event_botonconsultarActionPerformed
 
     private void botonguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonguardarActionPerformed
-        if(new dbInventario().ValidarEspaciosGuardar()){
+        if(ValidarEspaciosGuardar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbInventario().IngresarIdentidades();
+           IdentidadesProveedores idp = repro.ConsultarRegistro(cbproveedores.getSelectedItem().toString());
+           IdentidadesInventario id = new IdentidadesInventario(txtcodigo.getText(),txtnombre.getText(),txtadescripcion.getText(),cbtipo.getSelectedItem().toString(),Double.parseDouble(txtpreciounitario.getText()),Integer.parseInt(spcantidad.getValue().toString()),idp);
+           repi.IngresarRegistros(id);
             botonconsultar.setEnabled(true);
             botonnuevo.setEnabled(true);
             botonrealizarconsulta.setEnabled(false);
@@ -313,7 +321,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
             botoneliminar.setEnabled(false);
             botonguardar.setEnabled(false);
             DeshabilitarCampos();
-            new dbInventario().Limpiar();
+            repi.Limpiar();
         }
             
         
@@ -324,18 +332,28 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "PORFAVOR LLENE PARAMETRO DE BUSQUEDA","WARNING",JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-             new dbInventario().ConsultarRegistros();
+            IdentidadesInventario id = repi.ConsultarRegistros();
+            txtidproducto.setText(Integer.toString(id.getId_inventario()));
+            txtnombre.setText(id.getNombre_producto());
+            txtcodigo.setText(id.getCodigo_producto());
+            txtadescripcion.setText(id.getDescripcion());
+            cbtipo.setSelectedItem(id.getTipo());
+            txtpreciounitario.setText(Double.toString(id.getPrecio_unitario()));
+            cbproveedores.setSelectedItem(id.getProveedores().getNombre_proveedores());
+            spcantidad.setValue(id.getCantidad());
         }
         
        
     }//GEN-LAST:event_botonrealizarconsultaActionPerformed
 
     private void botonmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonmodificarActionPerformed
-        if(new dbInventario().ValidarEspaciosModificar()){
+        if(ValidarEspaciosModificar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbInventario().ModificarIdentidades();
+            IdentidadesProveedores idp = repro.ConsultarRegistro(cbproveedores.getSelectedItem().toString());
+            IdentidadesInventario id = new IdentidadesInventario(Integer.parseInt(txtidproducto.getText()),txtcodigo.getText(),txtnombre.getText(),txtadescripcion.getText(),cbtipo.getSelectedItem().toString(),Double.parseDouble(txtpreciounitario.getText()),Integer.parseInt(spcantidad.getValue().toString()),idp);
+            repi.ModificarRegistros(id);
             DeshabilitarCampos();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
@@ -343,7 +361,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
             botonmodificar.setEnabled(false);
             botoneliminar.setEnabled(false);
             botonguardar.setEnabled(false);
-            new dbInventario().Limpiar();
+            repi.Limpiar();
         }
         
     }//GEN-LAST:event_botonmodificarActionPerformed
@@ -430,7 +448,7 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
     private javax.swing.JButton botonmodificar;
     private javax.swing.JButton botonnuevo;
     private javax.swing.JButton botonrealizarconsulta;
-    public static javax.swing.JComboBox<String> cbproveedores;
+    public static javax.swing.JComboBox cbproveedores;
     public static javax.swing.JComboBox<String> cbtipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -511,5 +529,14 @@ public class MantenimientoInventarios extends javax.swing.JFrame {
             espacio = true;
         }
         return espacio;
+    }
+    
+    public void cargarProveedores(){
+        List <IdentidadesProveedores> provs = repro.cargarProveedores();
+        cbproveedores.removeAllItems();
+        for(IdentidadesProveedores prov : provs){
+            cbproveedores.addItem(prov);
+        }
+        cbproveedores.setSelectedIndex(-1);
     }
 }

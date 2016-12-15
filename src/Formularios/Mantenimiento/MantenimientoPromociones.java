@@ -8,13 +8,15 @@ package Formularios.Mantenimiento;
 import javax.swing.JOptionPane;
 import libraries.formularios.dbPromociones;
 import libraries.formularios.libValidacionesTexto;
+import libraries.identidades.IdentidadesPromociones;
+import repositorio.repositorio_promociones;
 
 /**
  *
  * @author Ellet
  */
 public class MantenimientoPromociones extends javax.swing.JFrame {
-
+    repositorio_promociones repro = new repositorio_promociones();
     /**
      * Creates new form MantenimientoPromociones
      */
@@ -212,13 +214,13 @@ public class MantenimientoPromociones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
-        if(new dbPromociones().ValidacionEspaciosEliminar()){
+        if(repro.ValidacionEspaciosEliminar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR LA ID DE LA PROMOCION A ELIMINAR", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbPromociones().EliminarRegistros();
+            repro.EliminarRegistros();
             DeshabilitarCampos();
-            new dbPromociones().Limpiar();
+            repro.Limpiar();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
             botonrealizarconsulta.setEnabled(false);
@@ -239,17 +241,18 @@ public class MantenimientoPromociones extends javax.swing.JFrame {
         HabilitarCampos();
         botonconsultar.setEnabled(false);
         botonnuevo.setEnabled(true);
-        new dbPromociones().Limpiar();
+        repro.Limpiar();
     }//GEN-LAST:event_botonconsultarActionPerformed
 
     private void botonguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonguardarActionPerformed
-        if(new dbPromociones().ValidacionEspaciosGuardar()){
+        if(repro.ValidacionEspaciosGuardar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbPromociones().IngresarIdentidades();
+            IdentidadesPromociones id = new IdentidadesPromociones(txtcodigo.getText(),txtnombre.getText(),txtadescripcion.getText(),cbtipo.getSelectedItem().toString());
+            repro.IngresarRegistros(id);
             DeshabilitarCampos();
-            new dbPromociones().Limpiar();
+            repro.Limpiar();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
             botonrealizarconsulta.setEnabled(false);
@@ -274,7 +277,7 @@ public class MantenimientoPromociones extends javax.swing.JFrame {
         HabilitarCampos();
         botonnuevo.setEnabled(false);
         botonconsultar.setEnabled(true);
-        new dbPromociones().Limpiar();
+        repro.Limpiar();
     }//GEN-LAST:event_botonnuevoActionPerformed
 
     private void cbtipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbtipoActionPerformed
@@ -286,13 +289,14 @@ public class MantenimientoPromociones extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnombreActionPerformed
 
     private void botonmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonmodificarActionPerformed
-        if(new dbPromociones().ValidacionEspaciosModificar()){
+        if(repro.ValidacionEspaciosModificar()){
             JOptionPane.showMessageDialog(null, "DEBE LLENAR TODOS LOS DATOS", "WARNING",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            new dbPromociones().ModificarIdentidades();
+            IdentidadesPromociones id = new IdentidadesPromociones(Integer.parseInt(txtidpromocion.getText()),txtcodigo.getText(),txtnombre.getText(),txtadescripcion.getText(),cbtipo.getSelectedItem().toString());
+            repro.ModificarRegistros(id);
             DeshabilitarCampos();
-            new dbPromociones().Limpiar();
+            repro.Limpiar();
             botonnuevo.setEnabled(true);
             botonconsultar.setEnabled(true);
             botonrealizarconsulta.setEnabled(false);
@@ -308,7 +312,13 @@ public class MantenimientoPromociones extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "PORFAVOR LLENE PARAMETRO DE BUSQUEDA","WARNING",JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            new dbPromociones().ConsultarRegistros();
+            IdentidadesPromociones id = repro.ConsultarRegistros();
+            txtidpromocion.setText(Integer.toString(id.getId_promociones()));
+            txtcodigo.setText(id.getCodigo_promocion());
+            txtnombre.setText(id.getNombre_promocion());
+            txtadescripcion.setText(id.getDescripcion());
+            cbtipo.setSelectedItem(id.getTipo());
+            
         }
         
     }//GEN-LAST:event_botonrealizarconsultaActionPerformed

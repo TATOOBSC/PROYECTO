@@ -67,6 +67,12 @@ public class IdentidadesProveedores {
         this.tipo_producto = tipo_producto;
     }
 
+    @Override
+    public String toString() {
+        return this.nombre_proveedores;
+    }
+
+    
     
     
     
